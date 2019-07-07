@@ -12,10 +12,11 @@ import CoreMotion
 class ViewController: UIViewController {
     
     let motionManager = CMMotionManager()
-    @IBOutlet weak var textLabel: UILabel!
+    @IBOutlet weak var spinXLabel: UILabel!
+    @IBOutlet weak var spinYLabel: UILabel!
     @IBOutlet weak var valueXLabel: UILabel!
     @IBOutlet weak var valueYLabel: UILabel!
-    @IBOutlet weak var valueZLabel: UILabel!
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,23 +31,22 @@ class ViewController: UIViewController {
             motionManager.startGyroUpdates(to: OperationQueue.main) { (data, error) in
                 print(data!)
                 
-                if ((data!.rotationRate.x > 1)||(data!.rotationRate.x < -1)){
-                    self.textLabel.text = "X-axis: SPIN UP/DOWN "
-                } else if ((data!.rotationRate.y > 1)||(data!.rotationRate.y < -1)){
-                    self.textLabel.text = "Y-axis: SPIN LEFT/RIGHT"
-                    
-                } else if((data!.rotationRate.z > 1)||(data!.rotationRate.z < -1)){
-                    self.textLabel.text = "Z-axis: ROTATE LEFT/RIGHT"
-                }
-                
-                else{
-                    self.textLabel.text = "SPIN!"
+                if (data!.rotationRate.x > 0.5){
+                    self.spinXLabel.text = "X-axis: SPIN UP"
+                } else if (data!.rotationRate.x < -0.5){
+                    self.spinXLabel.text = "X-axis: SPIN DOWN"
+                } else if (data!.rotationRate.y > 0.5){
+                    self.spinYLabel.text = "Y-axis: SPIN RIGHT"
+                } else if (data!.rotationRate.y < -0.5){
+                    self.spinYLabel.text = "Y-axis: SPIN LEFT"
+                } else{
+                    self.spinXLabel.text = "X-axis: SPIN ME!"
+                    self.spinYLabel.text = "Y-axis: SPIN ME!"
                 }
                 
 
                 self.valueXLabel.text = String(format: "%.3f", (data?.rotationRate.x)!)
                 self.valueYLabel.text = String(format: "%.3f", (data?.rotationRate.y)!)
-                self.valueZLabel.text = String(format: "%.3f", (data?.rotationRate.z)!)
                 
             }
         }
